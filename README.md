@@ -36,6 +36,7 @@
 
 ## Usage
 
+
 1. Clone the repository to your local machine:
     ```bash
     git clone https://github.com/jxkz3/filtex.git
@@ -48,4 +49,18 @@
 
 3. Make the script executable:
     ```bash
-    chmo
+    chmod +x filtex.sh
+    ```
+
+4. Run the script with the `endpoints.txt` file:
+    ```bash
+    ./filtex.sh
+    ```
+
+## Contributions
+
+Contributions are welcome! Feel free to fork the repository and submit pull requests for improvements or new features.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
