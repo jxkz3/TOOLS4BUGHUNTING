@@ -54,7 +54,7 @@
 
 4. Run the script with the `endpoints.txt` file:
     ```bash
-    ./filtex.sh
+    ./filtex.sh -f cutsomfile.txt
     ```
 
 ## Contributions
