@@ -16,6 +16,7 @@ echo "************ GitHub Dork Links for Organization: $org *******************"
 # Define an array of sensitive keywords
 keywords=(
 "password"
+"JDBC"
 "npmrc _auth"
 "dockercfg"
 "pem private"
