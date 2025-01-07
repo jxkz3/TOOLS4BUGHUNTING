@@ -1,23 +1,14 @@
 #!/bin/bash
 
-# Set default file name if no input is provided
+# Define file and directory variables
 ENDPOINTS_FILE="endpoints.txt"
-RESULT_DIR="results"
+RESULT_DIR="Furl"
 
-# Parse command-line options for custom file input
-while getopts "f:" opt; do
-  case $opt in
-    f) ENDPOINTS_FILE="$OPTARG" ;;
-    \?) echo "Usage: $0 [-f input_file]" >&2
-        exit 1 ;;
-  esac
-done
-
-# Create results directory if it does not exist
-mkdir -p "$RESULT_DIR"
+# Create Furl directory if it does not exist
+mkdir -p $RESULT_DIR
 
 # Check if endpoints file exists and is not empty
-if [ ! -s "$ENDPOINTS_FILE" ]; then
+if [ ! -s $ENDPOINTS_FILE ]; then
     echo "Error: $ENDPOINTS_FILE is empty or does not exist."
     exit 1
 fi
@@ -27,6 +18,7 @@ if ! command -v grep &> /dev/null; then
     echo "Error: grep is not installed. Please install grep and try again."
     exit 1
 fi
+
 # Define regex patterns for various filters
 RCE_PATTERNS='\?cmd=|\?exec=|\?command=|\?execute=|\?ping=|\?query=|\?jump=|\?code=|\?reg=|\?do=|\?func=|\?arg=|\?option=|\?load=|\?process=|\?step=|\?read=|\?function=|\?req=|\?feature=|\?exe=|\?module=|\?payload=|\?run=|\?print=|\?shell=|\?debug='
 SSRF_PATTERNS='\?dest=|\?redirect=|\?uri=|\?path=|\?continue=|\?url=|\?window=|\?next=|\?data=|\?reference=|\?site=|\?html=|\?val=|\?validate=|\?domain=|\?callback=|\?return=|\?page=|\?feed=|\?host=|\?port=|\?to=|\?out=|\?view=|\?dir=|\?remote=|\?fetch='
@@ -48,60 +40,55 @@ INFO_DISCLOSURE_EXTENSIONS='\.(xls|xlsx|pdf|sql|doc|docx|pptx|txt|zip|tar\.gz|tg
 
 
 # Filter Remote Code Execution (RCE) parameters
-grep -E "$RCE_PATTERNS" $ENDPOINTS_FILE > $RESULT_DIR/results-rce.txt
+grep -E "$RCE_PATTERNS" $ENDPOINTS_FILE > $RESULT_DIR/Furl-rce.txt
 
 # Filter Server-Side Request Forgery (SSRF) parameters
-grep -E "$SSRF_PATTERNS" $ENDPOINTS_FILE > $RESULT_DIR/results-ssrf.txt
+grep -E "$SSRF_PATTERNS" $ENDPOINTS_FILE > $RESULT_DIR/Furl-ssrf.txt
 
 # Filter Local File Inclusion (LFI) parameters
-grep -E "$LFI_PATTERNS" $ENDPOINTS_FILE > $RESULT_DIR/results-lfi.txt
+grep -E "$LFI_PATTERNS" $ENDPOINTS_FILE > $RESULT_DIR/Furl-lfi.txt
 
 # Filter SQL Injection (SQLi) parameters
-grep -E "$SQLI_PATTERNS" $ENDPOINTS_FILE > $RESULT_DIR/results-sqli.txt
+grep -E "$SQLI_PATTERNS" $ENDPOINTS_FILE > $RESULT_DIR/Furl-sqli.txt
 
 # Filter Cross-Site Scripting (XSS) parameters
-grep -E "$XSS_PATTERNS" $ENDPOINTS_FILE > $RESULT_DIR/results-xss.txt
+grep -E "$XSS_PATTERNS" $ENDPOINTS_FILE > $RESULT_DIR/Furl-xss.txt
 
 # Filter specific file extensions (images)
-grep -E "$IMAGE_EXTENSIONS" $ENDPOINTS_FILE > $RESULT_DIR/results-images.txt
+grep -E "$IMAGE_EXTENSIONS" $ENDPOINTS_FILE > $RESULT_DIR/Furl-images.txt
 
 # Filter Open Redirect (OPRI) parameters
-grep -E '\?next=|\?url=|\?target=|\?rurl=|\?dest=|\?destination=|\?redir=|\?redirect_uri=|\?redirect_url=|\?redirect=|/redirect/|/cgi-bin/redirect.cgi?|\?out=|\?view=|\?login?to=|\?image_url=|\?go=|\?return=|\?returnTo=|\?return_to=|\?checkout_url=|\?continue=|\?return_path=' $ENDPOINTS_FILE > $RESULT_DIR/results-opri.txt
+grep -E '\?next=|\?url=|\?target=|\?rurl=|\?dest=|\?destination=|\?redir=|\?redirect_uri=|\?redirect_url=|\?redirect=|/redirect/|/cgi-bin/redirect.cgi?|\?out=|\?view=|\?login?to=|\?image_url=|\?go=|\?return=|\?returnTo=|\?return_to=|\?checkout_url=|\?continue=|\?return_path=' $ENDPOINTS_FILE > $RESULT_DIR/Furl-opri.txt
 
-grep -E '@(gmail|outlook|hotmail|custom|yahoo|aol|icloud|mail|live|mail\.ru|zoho|gmx|yandex|protonmail|tutanota)\.com|%40(gmail|outlook|...)' $ENDPOINTS_FILE > $RESULT_DIR/results-emails.txt
+# Filter email domains (plain and URL-encoded)
+grep -E '@gmail.com|@outlook.com|@hotmail.com|@custom.com|@yahoo.com|@aol.com|@icloud.com|@mail.com|@live.com|@mail.ru|@zoho.com|@gmx.com|@yandex.com|@protonmail.com|@tutanota.com|%40gmail.com|%40outlook.com|%40hotmail.com|%40custom.com|%40yahoo.com|%40aol.com|%40icloud.com|%40mail.com|%40live.com|%40mail.ru|%40zoho.com|%40gmx.com|%40yandex.com|%40protonmail.com|%40tutanota.com' $ENDPOINTS_FILE > $RESULT_DIR/Furl-emails.txt
 
 # Filter sensitive information parameters
-grep -E "$SENSITIVE_INFO_PATTERNS" $ENDPOINTS_FILE > $RESULT_DIR/results-sensitive-info.txt
+grep -E "$SENSITIVE_INFO_PATTERNS" $ENDPOINTS_FILE > $RESULT_DIR/Furl-sensitive-info.txt
 
 # Filter specific keywords
-grep -E "$KEYWORD_PATTERNS" $ENDPOINTS_FILE > $RESULT_DIR/results-keywords.txt
+grep -E "$KEYWORD_PATTERNS" $ENDPOINTS_FILE > $RESULT_DIR/Furl-keywords.txt
 
 # Filter various web file extensions
-grep -E "$WEB_EXTENSIONS" $ENDPOINTS_FILE > $RESULT_DIR/results-web-extensions.txt
+grep -E "$WEB_EXTENSIONS" $ENDPOINTS_FILE > $RESULT_DIR/Furl-web-extensions.txt
 
 # Filter specific file extensions (PDF and similar)
-grep -E "$DOC_EXTENSIONS" $ENDPOINTS_FILE > $RESULT_DIR/results-docs.txt
+grep -E "$DOC_EXTENSIONS" $ENDPOINTS_FILE > $RESULT_DIR/Furl-docs.txt
 
 # Filter XML and JSON file extensions
-grep -E "$XML_JSON_EXTENSIONS" $ENDPOINTS_FILE > $RESULT_DIR/results-xml-json.txt
+grep -E "$XML_JSON_EXTENSIONS" $ENDPOINTS_FILE > $RESULT_DIR/Furl-xml-json.txt
 
 # Filter deprecated parameters
-grep -E "$DEPRECATED_PATTERNS" $ENDPOINTS_FILE > $RESULT_DIR/results-deprecated.txt
+grep -E "$DEPRECATED_PATTERNS" $ENDPOINTS_FILE > $RESULT_DIR/Furl-deprecated.txt
 
 # Filter JavaScript files (URLs and paths)
 cat $ENDPOINTS_FILE | grep -oE 'https?://[^ ]+\.js|/[^ ]+\.js' > $RESULT_DIR/jsfiles.txt
 
 # Filter OS Command Injection parameters
-grep -E "$OS_COMMAND_INJECTION_PATTERNS" $ENDPOINTS_FILE > $RESULT_DIR/results-oscommand-injection.txt
+grep -E "$OS_COMMAND_INJECTION_PATTERNS" $ENDPOINTS_FILE > $RESULT_DIR/Furl-oscommand-injection.txt
 
 # Filter various file extensions
-grep -E "$INFO_DISCLOSURE_EXTENSIONS" $ENDPOINTS_FILE > $RESULT_DIR/results-info-disclosure.txt
+grep -E "$INFO_DISCLOSURE_EXTENSIONS" $ENDPOINTS_FILE > $RESULT_DIR/Furl-info-disclosure.txt
 
 
 echo "All filtering operations completed."
-
-## Summary Output:
-for file in $RESULT_DIR/*.txt; do
-    echo "$(basename $file): $(wc -l < $file) matches"
-done
-
