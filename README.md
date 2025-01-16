@@ -22,3 +22,8 @@
 
 ## License
 MIT License.
+
+----
+# drklink.sh
+drklink.sh is a bash script that generates GitHub search URLs to find sensitive data (like API keys, passwords, and secrets) in an organization's repositories. It takes the organization's name as an argument and searches for predefined security-related keywords, outputting the relevant GitHub search links.
+
