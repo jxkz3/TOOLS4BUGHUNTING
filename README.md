@@ -20,8 +20,7 @@
     ./filtex.sh -f customfile.txt
     ```
 
-## License
-MIT License.
+
 
 ----
 # drklink.sh
